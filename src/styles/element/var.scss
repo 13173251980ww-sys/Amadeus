@@ -1,0 +1,106 @@
+@use "@/styles/var.scss" as *;
+
+@forward 'element-plus/theme-chalk/src/common/var.scss' with (
+  /* 主色 */
+  $colors: (
+    'primary': (
+      'base': $color-primary,
+    ),
+    'success': (
+      'base': $color-success,
+    ),
+    'warning': (
+      'base': $color-warning,
+    ),
+    'danger': (
+      'base': $color-danger,
+    ),
+    'info': (
+      'base': $color-info,
+    ),
+  ),
+
+  /* 文本颜色 */
+  $text-color: (
+    'primary': $text-color-primary,
+    'regular': $text-color-regular,
+    'secondary': $text-color-secondary,
+    'placeholder': $text-color-placeholder,
+  ),
+
+  /* 背景色 */
+  $bg-color: (
+    'page': $bg-color-page,
+    '': $bg-color-container,
+    'overlay': $bg-color-card,
+  ),
+
+  /* 边框 */
+  $border-color: (
+    '': $border-color-base,
+    'light': $border-color-light,
+  ),
+
+  /* 圆角 */
+  $border-radius: (
+    'base': $border-radius-base,
+    'round': $border-radius-round,
+  )
+);
+
+
+
+
+/* 按钮 */
+.el-button--primary {
+  background: linear-gradient(
+                  135deg,
+                  $color-primary,
+                  $color-primary-dark
+  );
+  border: none;
+  color: #000;
+  box-shadow: $box-shadow-gold;
+}
+
+/* 表格 */
+.el-table {
+  background-color: $bg-color-container;
+  color: $text-color-regular;
+
+  th {
+    background-color: $bg-color-card;
+    color: $text-color-gold;
+  }
+
+  tr:hover > td {
+    background-color: $bg-color-hover;
+  }
+}
+
+/* 输入框 */
+.el-input__wrapper {
+  background-color: $bg-color-card;
+  border: 1px solid $border-color-base;
+
+  &:hover {
+    border-color: $color-primary;
+  }
+}
+
+/* 菜单 */
+.el-menu {
+  background-color: $bg-color-container;
+  border-right: 1px solid $border-color-base;
+}
+
+.el-menu-item.is-active {
+  color: $color-primary;
+  background-color: rgba(201, 162, 77, 0.12);
+}
+
+/* 弹窗 */
+.el-dialog {
+  background-color: $bg-color-card;
+  box-shadow: $box-shadow-base;
+}
