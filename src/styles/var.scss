@@ -32,6 +32,19 @@ $text-color-placeholder: #6f6f6f;
 /* 暗金高亮 */
 $text-color-gold: #c9a24d;
 $text-color-gold-light: #e6c87a;
+$text-color-gold-lighter: #f0d68a;  // 更亮的金色用于高亮
+$text-color-gold-lightest: #fff3d1; // 最亮的金色用于文字
+$text-color-gold-muted: #7f6a2f;    // 静音金色用于禁用状态
+
+/* 菜单特定颜色 */
+$menu-bg: rgba(12, 12, 12, 0.85);
+$menu-border-color: rgba(201, 162, 77, 0.15);
+$menu-divider-color: rgba(201, 162, 77, 0.05);
+$menu-hover-bg-start: rgba(201, 167, 74, 0.08);
+$menu-hover-bg-end: rgba(184, 138, 20, 0.04);
+$menu-active-bg-start: rgba(201, 162, 77, 0.18);
+$menu-active-bg-end: rgba(184, 138, 20, 0.12);
+$menu-focus-ring: rgba(201, 162, 77, 0.25);
 
 /* 阴影 */
 $box-shadow-base: 0 4px 12px rgba(0, 0, 0, 0.6);
