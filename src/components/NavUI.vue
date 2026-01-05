@@ -122,7 +122,7 @@ const handleSelect = (key, keyPath) => {
 </template>
 
 <style scoped lang="scss">
-@import "@/styles/var.scss";
+@use "@/styles/var.scss" as *;
 
 .nav-container {
   min-height: 100vh;
