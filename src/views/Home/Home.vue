@@ -1,6 +1,7 @@
 <script setup>
   import {testApi} from "@/apis/test.js";
   import {onMounted} from "vue";
+  import NavUI from "@/components/NavUI.vue";
   setTimeout(async () => {
         await testApi();
       }
@@ -8,10 +9,7 @@
 </script>
 
 <template>
-  <div class="home-page">
-    <h1>首页</h1>
-    <p>欢迎来到 Amadeus 前端项目。</p>
-  </div>
+  <NavUI />
 </template>
 
 <style scoped>
