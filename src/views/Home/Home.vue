@@ -9,13 +9,10 @@
 
 <template>
   <div class="home-page">
-    <h1>首页</h1>
-    <p>欢迎来到 Amadeus 前端项目。</p>
+    欢迎来到Amadeus前端项目
   </div>
 </template>
 
 <style scoped>
-.home-page {
-  padding: 24px;
-}
+
 </style>

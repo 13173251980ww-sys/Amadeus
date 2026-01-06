@@ -5,8 +5,11 @@ const router = createRouter({
   routes: [
       {
         path: '/',
-        name: 'home',
-        component: () => import('@/views/Home/Home.vue'),
+        name: 'layout',
+        component: () => import('@/views/Layout/layout.vue'),
+        children: [
+            {path:'', component:()=>import('@/views/Home/Home.vue')}
+        ]
       },
       {
           path: '/login',
@@ -14,6 +17,16 @@ const router = createRouter({
           component: () => import('@/views/Login/Login.vue'),
       }
   ],
+})
+
+// 全局路由守卫：未登录跳转登录页
+router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem('token');
+  if (to.path !== '/login' && !token) {
+    next('/login');
+  } else {
+    next();
+  }
 })
 
 export default router

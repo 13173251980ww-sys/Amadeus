@@ -1,6 +1,7 @@
 // axios基础的封装
 import axios from 'axios'
 import router from "@/router/index.js";
+import {ElMessage} from "element-plus";
 const httpInstance = axios.create({
     // baseURL:'/api',
     baseURL: 'http://localhost:8080',
@@ -27,10 +28,11 @@ httpInstance.interceptors.request.use(config => {
 httpInstance.interceptors.response.use(response => {
     //成功回调
     return response
-}, error => {
+}, async error => {
     // 如果响应状态码是401，说明token过期或无效，跳转到登录页面
     // console.log(error.response)
-    router.push('/login')
+    await router.push('/login')
+    ElMessage.error("身份验证失败，请重新登录")
     return Promise.reject(error)
 })
 
