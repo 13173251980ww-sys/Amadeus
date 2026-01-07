@@ -31,9 +31,15 @@ httpInstance.interceptors.response.use(response => {
 }, async error => {
     // 如果响应状态码是401，说明token过期或无效，跳转到登录页面
     // console.log(error.response)
-    await router.push('/login')
-    ElMessage.error("身份验证失败，请重新登录")
-    return Promise.reject(error)
+    console.log(error.response.status)
+    if(error.response.status===401){
+        await router.push('/login')
+        ElMessage.error("身份验证失败，请重新登录")
+        return Promise.reject(error)
+    }else if(error.response.status===400){
+        ElMessage.error("接口请求格式错误,请检查接口")
+        return Promise.reject(error)
+    }
 })
 
 

@@ -1,38 +1,26 @@
 <script setup>
-import { ref, computed } from 'vue'
+import {ref, computed, onMounted} from 'vue'
+import {getCommentsApi} from "@/apis/comment.js";
 
 const pageSize = 8
 const currentPage = ref(1)
 
-// 静态示例数据（回滚到静态留言板）
-const commentList = ref([
-  { id: 1, username: 'Alice', time: '2026-01-01 10:00', content: '第一条示例留言：你好，这是一个静态示例。', iconurl: '' },
-  { id: 2, username: 'Bob', time: '2026-01-02 11:12', content: '第二条示例留言：前端很有趣！', iconurl: '' },
-  { id: 3, username: 'Carol', time: '2026-01-03 09:30', content: '第三条示例留言：祝你编码愉快！', iconurl: '' },
-  { id: 4, username: 'Dave', time: '2026-01-04 14:05', content: '第四条示例留言：这是静态数据。', iconurl: '' },
-  { id: 5, username: 'Eve', time: '2026-01-05 16:22', content: '第五条示例留言：页面看起来很棒。', iconurl: '' },
-  { id: 6, username: 'Frank', time: '2026-01-06 08:45', content: '第六条示例留言：测试内容 A', iconurl: '' },
-  { id: 7, username: 'Grace', time: '2026-01-07 12:00', content: '第七条示例留言：测试内容 B', iconurl: '' },
-  { id: 8, username: 'Heidi', time: '2026-01-08 18:30', content: '第八条示例留言：测试内容 C', iconurl: '' },
-  { id: 9, username: 'Ivan', time: '2026-01-09 07:10', content: '第九条示例留言：第九条', iconurl: '' },
-  { id: 10, username: 'Judy', time: '2026-01-10 20:20', content: '第十条示例留言：第十条', iconurl: '' },
-  { id: 11, username: 'Ken', time: '2026-01-11 13:13', content: '第十一条示例留言：第十一条', iconurl: '' },
-  { id: 12, username: 'Leo', time: '2026-01-12 09:09', content: '第十二条示例留言：第十二条', iconurl: '' },
-  { id: 13, username: 'Mia', time: '2026-01-13 21:21', content: '第十三条示例留言：第十三条', iconurl: '' },
-  { id: 14, username: 'Nina', time: '2026-01-14 06:06', content: '第十四条示例留言：第十四条', iconurl: '' },
-  { id: 15, username: 'Oscar', time: '2026-01-15 15:15', content: '第十五条示例留言：第十五条', iconurl: '' },
-  { id: 16, username: 'Peggy', time: '2026-01-16 17:17', content: '第十六条示例留言：第十六条', iconurl: '' },
-  { id: 17, username: 'Quinn', time: '2026-01-17 19:19', content: '第十七条示例留言：第十七条', iconurl: '' },
-  { id: 18, username: 'Rita', time: '2026-01-18 08:08', content: '第十八条示例留言：第十八条', iconurl: '' }
-])
+const total = ref(0)
 
-const total = computed(() => commentList.value.length)
+const pagedItems = ref([])
 
-const pagedItems = computed(() => commentList.value.slice((currentPage.value - 1) * pageSize, currentPage.value * pageSize))
-
-function handlePageChange(page) {
+async function handlePageChange(page) {
   currentPage.value = page
+  const res=await getCommentsApi(currentPage.value,pageSize);
+  pagedItems.value=res.data.data.list;
+  total.value=res.data.data.total;
 }
+
+onMounted(async ()=>{
+  const res=await getCommentsApi(currentPage.value,pageSize);
+  pagedItems.value=res.data.data.list;
+  total.value=res.data.data.total;
+})
 </script>
 
 <template>
