@@ -1,14 +1,13 @@
 <script setup>
 import {ref, computed, onMounted} from 'vue'
-import {getCommentsApi} from "@/apis/comment.js";
+import {addCommentApi, getCommentsApi} from "@/apis/comment.js";
+import MessageEdit from "@/views/MessageBoard/Component/MessageEdit.vue";
 
+// 分页相关
 const pageSize = 8
 const currentPage = ref(1)
-
 const total = ref(0)
-
 const pagedItems = ref([])
-
 async function handlePageChange(page) {
   currentPage.value = page
   const res=await getCommentsApi(currentPage.value,pageSize);
@@ -16,11 +15,32 @@ async function handlePageChange(page) {
   total.value=res.data.data.total;
 }
 
-onMounted(async ()=>{
+//重新渲染页面
+async function updateComments(){
   const res=await getCommentsApi(currentPage.value,pageSize);
   pagedItems.value=res.data.data.list;
   total.value=res.data.data.total;
-})
+}
+
+onMounted(async ()=>{
+  await updateComments()}
+)
+
+//编辑留言
+const editVisible=ref(false);
+//打开留言面板
+function onEdit(){
+  editVisible.value=true;
+}
+//关闭留言面板并且提交留言
+async function onSubmit(commentData){
+  const {username,content,iconurl}=commentData;
+  console.log({username,content,iconurl});
+  await addCommentApi({username,content,iconurl});
+  await updateComments()
+  editVisible.value=false;
+}
+
 </script>
 
 <template>
@@ -32,10 +52,10 @@ onMounted(async ()=>{
       </header>
 
       <section class="mb-new">
-        <div class="avatar">你</div>
+        <div class="avatar">|´・ω・)ノ</div>
         <div class="input-wrap">
-          <input class="mb-input" placeholder="留下你的消息...." disabled />
-          <button class="submit-btn" title="发布" disabled>
+          <input class="mb-input" placeholder="按右边箭头发布信息~" disabled />
+          <button class="submit-btn" title="发布" @click="onEdit()">
             <!-- 小箭头图标（字符占位） -->
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M5 12h14M13 5l6 7-6 7" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -80,6 +100,8 @@ onMounted(async ()=>{
       <footer class="mb-footer">共有 {{ total }} 条留言</footer>
     </div>
   </div>
+
+  <MessageEdit :visible="editVisible" @on-submit="onSubmit"/>
 </template>
 
 <style scoped>
@@ -153,6 +175,7 @@ onMounted(async ()=>{
   padding: 12px 14px;
   border-radius: 10px;
   border: 1px solid rgba(255,255,255,0.06);
+  cursor: not-allowed;
   background: rgba(255,255,255,0.02);
   color: #efefef;
   outline: none;
@@ -170,7 +193,7 @@ onMounted(async ()=>{
   align-items: center;
   justify-content: center;
   border: none;
-  cursor: not-allowed;
+  cursor: pointer;
   box-shadow: 0 2px 6px rgba(0,0,0,0.45);
   padding: 6px;
 }

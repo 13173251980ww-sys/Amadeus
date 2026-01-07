@@ -11,3 +11,11 @@ export const getCommentsApi = ((pageNum,pageSize)=>{
         }
     )
 })
+
+export const addCommentApi = (commentData)=>{
+    return httpInstance({
+        url:'/comment',
+        method:'post',
+        data:commentData
+    })
+}
