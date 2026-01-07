@@ -2,8 +2,9 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import { loginApi } from '@/apis/user'
-
+import {useUserStore} from "@/stores/useUserStores.js";
+import {storeToRefs} from "pinia";
+const userStore=useUserStore();
 
 const router = useRouter()
 const formRef = ref(null)
@@ -19,11 +20,13 @@ const onSubmit = () => {
   formRef.value.validate(async valid => {
     if (!valid) return
 
-    const loginInfo=await loginApi({ ...form.value })
-    const {code}=loginInfo.data;
+    await userStore.getLoginInfo(form.value)
+    const {loginInfo}=storeToRefs(userStore)
+    console.log(loginInfo.value)
+    const {code}=loginInfo.value;
     if(code===200){
       ElMessage({ type: 'success', message: '登录成功！', showClose: false })
-      localStorage.setItem('token',JSON.stringify(loginInfo.data.data.token))
+      localStorage.setItem('token',JSON.stringify(loginInfo.value.data.token))
       router.push({ path: '/' })
     }else if(code===401){
       ElMessage({  message: '用户名或密码错误！', showClose: false })
@@ -33,9 +36,6 @@ const onSubmit = () => {
   })
 }
 
-onMounted(() => {
-  // 可以在这里初始化或检查用户状态
-});
 </script>
 
 <template>
