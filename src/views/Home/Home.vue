@@ -1,9 +1,12 @@
 <script setup>
+  //测试令牌拦截器的test接口
   // import {testApi} from "@/apis/test.js";
   // setTimeout(async () => {
   //       await testApi();
   //     }
   // ,3000)
+
+
 </script>
 
 <template>

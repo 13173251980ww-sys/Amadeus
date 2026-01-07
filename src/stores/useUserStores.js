@@ -9,9 +9,12 @@ export const useUserStore = defineStore('user', () => {
         const res =await loginApi({username, password});
         loginInfo.value = res.data;
     }
+
     return{
         loginInfo,
         getLoginInfo
     }
-})
+},{persist:  true})
+
+
 
