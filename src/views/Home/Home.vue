@@ -1,18 +1,20 @@
 <script setup>
-  import {testApi} from "@/apis/test.js";
-  import {onMounted} from "vue";
-  setTimeout(async () => {
-        await testApi();
-      }
-  ,3000)
+  // import {testApi} from "@/apis/test.js";
+  // setTimeout(async () => {
+  //       await testApi();
+  //     }
+  // ,3000)
 </script>
 
 <template>
   <div class="home-page">
-    欢迎来到Amadeus前端项目
+
   </div>
 </template>
 
 <style scoped>
-
+  .home-page{
+    background: black url('@/assets/background/bg_01.jpg') no-repeat center top;
+    min-height: 100vh
+  }
 </style>

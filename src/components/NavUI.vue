@@ -17,7 +17,7 @@ defineProps({
     <div style="flex: 0.9"/>
     <el-menu-item index="/">首页</el-menu-item>
     <el-menu-item index="/blog">博客</el-menu-item>
-    <el-menu-item index="/frindLink" >友情链接</el-menu-item>
+    <el-menu-item index="/friendLink" >友情链接</el-menu-item>
     <el-menu-item index="/messageBoard">留言板</el-menu-item>
   </el-menu>
 </template>
