@@ -22,7 +22,7 @@ const onSubmit = () => {
 
     await userStore.getLoginInfo(form.value)
     const {loginInfo}=storeToRefs(userStore)
-    console.log(loginInfo.value)
+    // console.log(loginInfo.value)
     const {code}=loginInfo.value;
     if(code===200){
       ElMessage({ type: 'success', message: '登录成功！', showClose: false })

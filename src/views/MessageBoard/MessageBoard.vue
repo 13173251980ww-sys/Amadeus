@@ -1,33 +1,38 @@
 <script setup>
-import {ref, computed, onMounted} from 'vue'
-import {useCommentStores} from "@/stores/useCommentStores.js";
-import {storeToRefs} from "pinia";
-const commentStore = useCommentStores()
-
-const {getCommentData}=commentStore;
-const {commentList,total}=storeToRefs(commentStore);
+import { ref, computed } from 'vue'
 
 const pageSize = 8
-
 const currentPage = ref(1)
 
+// 静态示例数据（回滚到静态留言板）
+const commentList = ref([
+  { id: 1, username: 'Alice', time: '2026-01-01 10:00', content: '第一条示例留言：你好，这是一个静态示例。', iconurl: '' },
+  { id: 2, username: 'Bob', time: '2026-01-02 11:12', content: '第二条示例留言：前端很有趣！', iconurl: '' },
+  { id: 3, username: 'Carol', time: '2026-01-03 09:30', content: '第三条示例留言：祝你编码愉快！', iconurl: '' },
+  { id: 4, username: 'Dave', time: '2026-01-04 14:05', content: '第四条示例留言：这是静态数据。', iconurl: '' },
+  { id: 5, username: 'Eve', time: '2026-01-05 16:22', content: '第五条示例留言：页面看起来很棒。', iconurl: '' },
+  { id: 6, username: 'Frank', time: '2026-01-06 08:45', content: '第六条示例留言：测试内容 A', iconurl: '' },
+  { id: 7, username: 'Grace', time: '2026-01-07 12:00', content: '第七条示例留言：测试内容 B', iconurl: '' },
+  { id: 8, username: 'Heidi', time: '2026-01-08 18:30', content: '第八条示例留言：测试内容 C', iconurl: '' },
+  { id: 9, username: 'Ivan', time: '2026-01-09 07:10', content: '第九条示例留言：第九条', iconurl: '' },
+  { id: 10, username: 'Judy', time: '2026-01-10 20:20', content: '第十条示例留言：第十条', iconurl: '' },
+  { id: 11, username: 'Ken', time: '2026-01-11 13:13', content: '第十一条示例留言：第十一条', iconurl: '' },
+  { id: 12, username: 'Leo', time: '2026-01-12 09:09', content: '第十二条示例留言：第十二条', iconurl: '' },
+  { id: 13, username: 'Mia', time: '2026-01-13 21:21', content: '第十三条示例留言：第十三条', iconurl: '' },
+  { id: 14, username: 'Nina', time: '2026-01-14 06:06', content: '第十四条示例留言：第十四条', iconurl: '' },
+  { id: 15, username: 'Oscar', time: '2026-01-15 15:15', content: '第十五条示例留言：第十五条', iconurl: '' },
+  { id: 16, username: 'Peggy', time: '2026-01-16 17:17', content: '第十六条示例留言：第十六条', iconurl: '' },
+  { id: 17, username: 'Quinn', time: '2026-01-17 19:19', content: '第十七条示例留言：第十七条', iconurl: '' },
+  { id: 18, username: 'Rita', time: '2026-01-18 08:08', content: '第十八条示例留言：第十八条', iconurl: '' }
+])
 
-//items.slice(起始索引,结束索引) 返回一个新的数组，包含从起始索引到结束索引（不包括结束索引）之间的所有元素。
+const total = computed(() => commentList.value.length)
+
 const pagedItems = computed(() => commentList.value.slice((currentPage.value - 1) * pageSize, currentPage.value * pageSize))
 
-function goto(page) {
-  //边界检测
-  if (page < 1) page = 1
-  if (page > pageCount) page = pageCount
-
+function handlePageChange(page) {
   currentPage.value = page
 }
-function prev() { goto(currentPage.value - 1) }
-function next() { goto(currentPage.value + 1) }
-
-onMounted(async ()=>{
-  await getCommentData();
-})
 </script>
 
 <template>
@@ -55,7 +60,7 @@ onMounted(async ()=>{
         <article class="mb-item" v-for="item in pagedItems" :key="item.id">
           <div class="item-avatar"
             :style="{
-            backgroundImage: `url(${item.iconurl})`,
+            backgroundImage: item.iconurl ? `url(${item.iconurl})` : 'none',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat:  'no-repeat'
@@ -72,27 +77,19 @@ onMounted(async ()=>{
         </article>
       </section>
 
-      <!-- 分页控件 -->
-      <nav class="mb-pagination" aria-label="留言分页">
-        <button class="nav-btn" @click="prev" :disabled="currentPage === 1">上一页</button>
+      <!-- 分页控件：使用 Element Plus 的 el-pagination，保持视觉样式容器类名不变 -->
+      <div class="mb-pagination" aria-label="留言分页">
+        <el-pagination
+          background
+          layout="prev, pager, next"
+          :page-size="pageSize"
+          :total="total"
+          v-model:current-page="currentPage"
+          @current-change="handlePageChange"
+        />
+      </div>
 
-        <ul class="page-list">
-          <li v-for="p in pageCount" :key="p">
-            <button
-              class="page-num"
-              :class="{ active: p === currentPage }"
-              @click="goto(p)"
-              :aria-current="p === currentPage ? 'page' : null"
-            >
-              {{ p }}
-            </button>
-          </li>
-        </ul>
-
-        <button class="nav-btn" @click="next" :disabled="currentPage === pageCount">下一页</button>
-      </nav>
-
-      <footer class="mb-footer">共有 {{ total.value }} 条留言</footer>
+      <footer class="mb-footer">共有 {{ total }} 条留言</footer>
     </div>
   </div>
 </template>
@@ -244,37 +241,8 @@ onMounted(async ()=>{
   gap: 12px;
   margin: 12px 0 18px 0;
 }
-.nav-btn{
-  background: transparent;
-  border: 1px solid rgba(255,255,255,0.06);
-  color: rgba(255,255,255,0.85);
-  padding: 6px 10px;
-  border-radius: 8px;
-  cursor: pointer;
-}
-.nav-btn:disabled{ opacity: 0.35; cursor: default }
-
-.page-list{
-  list-style: none;
-  display: flex;
-  gap: 8px;
-  padding: 0;
-  margin: 0;
-}
-.page-num{
-  background: rgba(255,255,255,0.02);
-  border: 1px solid rgba(255,255,255,0.03);
-  color: rgba(255,255,255,0.75);
-  padding: 6px 10px;
-  border-radius: 6px;
-  cursor: pointer;
-}
-.page-num.active{
-  background: linear-gradient(90deg,#b86f0b,#ffd27a);
-  color: #0b0b0b;
-  font-weight: 700;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.35);
-}
+/* 给 Element Plus 分页做最小调整，避免空规则警告 */
+.el-pager li, .el-pager li.active a{ padding: 0; }
 
 .mb-footer{
   text-align: center;
@@ -289,7 +257,5 @@ onMounted(async ()=>{
   .mb-container{ padding: 18px; }
   .mb-header h1{ font-size: 22px; }
   .item-content{ font-size: 14px; }
-  .page-list{ gap: 6px }
-  .page-num{ padding: 6px 8px }
 }
 </style>
