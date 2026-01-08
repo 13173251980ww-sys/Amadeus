@@ -52,7 +52,7 @@ async function onSubmit(commentData){
       </header>
 
       <section class="mb-new">
-        <div class="avatar">|´・ω・)ノ</div>
+        <div class="avatar">・ω・</div>
         <div class="input-wrap">
           <input class="mb-input" placeholder="按右边箭头发布信息~" disabled />
           <button class="submit-btn" title="发布" @click="onEdit()">
@@ -101,7 +101,10 @@ async function onSubmit(commentData){
     </div>
   </div>
 
-  <MessageEdit :visible="editVisible" @on-submit="onSubmit"/>
+  <MessageEdit
+      v-model="editVisible"
+      @on-submit="onSubmit"
+  />
 </template>
 
 <style scoped>

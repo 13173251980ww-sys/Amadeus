@@ -20,6 +20,7 @@
       { immediate: true }
   )
 
+
   const commentData = ref({
     username: '',
     content: '',
@@ -36,8 +37,6 @@
   //el-upload 组件的 action 属性默认使用浏览器原生的上传行为，不会自动使用你项目中配置的 Axios 拦截器（比如自动添加 Token）。
   //获取token,让el-upload组件携带token上传图片
   const token = localStorage.getItem('token')
-
-
 
   const handleAvatarSuccess: UploadProps['onSuccess'] = (
       response,
