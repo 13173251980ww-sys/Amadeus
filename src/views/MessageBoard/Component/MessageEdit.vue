@@ -3,6 +3,16 @@
   import {Plus} from "@element-plus/icons-vue";
   import { ElMessage } from 'element-plus'
 
+  //表单校验
+  const formRef = ref(null)
+
+  const rules = {
+    username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
+    content: [{ required: true, message: '请输入密码', trigger: 'blur' }],
+    iconurl: [{ required: true, message: '请上传头像', trigger: 'change' }]
+  }
+
+  //父子相传
   const emit = defineEmits(['on-submit'])
   const props = defineProps({
     visible: {
@@ -10,7 +20,7 @@
       required: true
     }
   })
-  
+
   const dialogVisible = ref(false);
   watch(
       () => props.visible,
@@ -26,14 +36,22 @@
     content: '',
     iconurl: ''
   });
+
   const onsubmit = function (){
-    // 把数据回传给父组件
-    emit('on-submit', commentData.value);
+    //表单校验
+    formRef.value.validate(async valid => {
+      if (!valid){
+        alert("表单填写不完整~")
+        return
+      }
+
+      //提交数据给父组件
+      emit('on-submit',commentData.value)
+    })
   }
 
-
   //上传图片
-  
+
   //el-upload 组件的 action 属性默认使用浏览器原生的上传行为，不会自动使用你项目中配置的 Axios 拦截器（比如自动添加 Token）。
   //获取token,让el-upload组件携带token上传图片
   const token = localStorage.getItem('token')
@@ -60,14 +78,15 @@
 
 <template>
   <el-dialog v-model="dialogVisible" title="编辑留言">
-    <el-form label-position="top">
-      <el-form-item label="用户名">
+    <!-- 关键：将表单 model 绑定到 commentData，Element Plus 的校验器会读取 model 上的字段 -->
+    <el-form label-position="top" :rules="rules" ref="formRef" :model="commentData">
+      <el-form-item label="用户名" prop="username">
         <el-input v-model="commentData.username" placeholder="请输入用户名"></el-input>
       </el-form-item>
-      <el-form-item label="留言内容">
+      <el-form-item label="留言内容" prop="content">
         <el-input v-model="commentData.content" placeholder="请输入留言内容"></el-input>
       </el-form-item>
-      <el-form-item label="上传头像">
+      <el-form-item label="上传头像" prop="iconurl">
         <el-upload
             class="avatar-uploader"
             action="http://localhost:8080/upload"
