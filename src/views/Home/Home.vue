@@ -3,11 +3,16 @@
   import {ref} from "vue";
 
   const input=ref('');
-  const postMessage=async ()=>{
-    const res=await chatWithAiApi({message:"你好"});
-    console.log(res.data)
-    const showArea=document.getElementById("show-area");
-    showArea.innerText=res.data;
+  const output=ref('');
+  const postMessage=()=>{
+    output.value = ''
+
+    chatWithAiApi({
+      message:input.value,
+      onmessage(chunk){
+        output.value+=chunk;
+      },
+    })
   }
 
 </script>
@@ -20,10 +25,9 @@
       <div class="chat-content">
         <el-input v-model="input" placeholder="在这里输入你的消息..." class="chat-input"></el-input>
 
-        <div id="show-area" class="chat-show"></div>
+        <div class="chat-show">{{output}}</div>
       </div>
 
-      <!-- 按钮放在对话框后面 -->
       <div class="chat-actions">
         <el-button class="action-btn" @click="postMessage">发送</el-button>
       </div>
@@ -50,7 +54,7 @@
     padding: 30px 28px;
     border-radius: 16px;
     box-sizing: border-box;
-
+    background-color: rgba(0,0,0, 0.5);
   }
 
   .chat-title{
@@ -89,16 +93,5 @@
     justify-content: flex-end;
     margin-top: 18px;
   }
-
-
-
-
-
-
-
-
-
-
-
 
 </style>
