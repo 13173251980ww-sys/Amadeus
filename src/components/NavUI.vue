@@ -23,6 +23,21 @@ defineProps({
 </template>
 
 <style scoped>
+  /* 激活态（当前路由） */
+  .el-menu-demo ::v-deep .el-menu-item.is-active {
+    background-color: transparent !important;
+    color: #ffd66b; /* 激活时的金色 */
+  }
+
+  /* 点击瞬间（鼠标按下） */
+  .el-menu-demo ::v-deep .el-menu-item:active {
+    background-color: transparent !important;
+  }
+
+  /* 获取焦点（键盘 / 点击后） */
+  .el-menu-demo ::v-deep .el-menu-item:focus {
+    background-color: transparent !important;
+  }
   /* 作用于组件根 el-menu 组件（我们在模板上设置了 .el-menu-demo） */
   .el-menu-demo{
     background-color: #0b0b0b;
@@ -32,6 +47,7 @@ defineProps({
     display: flex;
     align-items: center;
   }
+
 
   /* 使用 ::v-deep 以穿透 scoped 样式并命中 Element 内部生成的 .el-menu-item */
   .el-menu-demo ::v-deep .el-menu-item{

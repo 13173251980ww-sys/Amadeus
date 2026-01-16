@@ -11,6 +11,7 @@
 <style scoped>
   .blog-page{
     background: black url('@/assets/background/bg_02.jpg') no-repeat center top;
+    background-size: cover;
     min-height: 100vh;
   }
 </style>

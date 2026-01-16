@@ -11,6 +11,7 @@
 <style scoped>
   .friendLink-page{
     background: black url('@/assets/background/bg_01.jpg') no-repeat center top;
+    background-size: cover;
     min-height: 100vh;
   }
 </style>

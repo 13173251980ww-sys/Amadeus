@@ -8,7 +8,6 @@ const httpInstance = axios.create({
     timeout: 5000
 })
 
-
 // 拦截器
 
 // axios请求拦截器
