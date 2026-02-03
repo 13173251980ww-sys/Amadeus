@@ -31,7 +31,7 @@ const onSubmit = () => {
     }else if(code===401){
       ElMessage({  message: '用户名或密码错误！', showClose: false })
     }else{
-      ElMessage({  message: '接口访问异常~', showClose: false })
+      ElMessage({  message: `报错+${code}`, showClose: false })
     }
   })
 }

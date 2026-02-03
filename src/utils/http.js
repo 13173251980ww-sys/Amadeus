@@ -4,7 +4,7 @@ import router from "@/router/index.js";
 import {ElMessage} from "element-plus";
 const httpInstance = axios.create({
     // baseURL:'/api',
-    baseURL: 'http://localhost:8080',
+    baseURL: import.meta.env.VITE_API_BASE_URL,
     timeout: 5000
 })
 

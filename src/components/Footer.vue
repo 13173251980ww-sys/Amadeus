@@ -1,34 +1,26 @@
 <script setup>
   import {onMounted} from "vue";
 
-  onMounted(()=>{
-    const run_time=document.getElementById("run_time");
+  onMounted(() => {
+    function show_runtime() {
+      window.setTimeout(show_runtime, 1000);
 
-    let day=0;
-    let hour=0;
-    let minute=0;
-    let second=0;
+      const start = new Date("2026/1/31 13:20:00");
+      const now = new Date();
+      const diff = now - start;
 
-    setInterval(function (){
-      second++;
-      if(second===60){
-        second=0;
-        minute++;
-        minute=minute<10?"0"+minute:minute;
+      const days = Math.floor(diff / (24*60*60*1000));
+      const hours = Math.floor((diff / (1000*60*60)) % 24);
+      const minutes = Math.floor((diff / (1000*60)) % 60);
+      const seconds = Math.floor((diff / 1000) % 60);
+
+      const runTimeElem = document.getElementById('run_time');
+      if(runTimeElem) {
+        runTimeElem.textContent =
+            `本站勉强运行: ${days}天${hours}小时${minutes}分${seconds}秒`;
       }
-      if(minute===60){
-        minute=0;
-        hour++;
-        hour=hour<10?"0"+hour:hour;
-      }
-      if(hour===24){
-        hour=0;
-        day++;
-        day=day<10?"0"+day:day;
-      }
-      second=second<10?"0"+second:second;
-      run_time.innerText="本站已勉强运行"+day+"天"+hour+"时"+minute+"分"+second+"秒";
-    },1000)
+    }
+    show_runtime();
   });
 </script>
 

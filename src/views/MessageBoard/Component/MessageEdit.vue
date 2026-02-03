@@ -60,8 +60,7 @@
       response,
       uploadFile
   ) => {
-    // 修复：commentData 是一个 ref，必须通过 .value 访问其内部对象的属性
-    commentData.value.iconurl = URL.createObjectURL(uploadFile.raw!)
+    commentData.value.iconurl = response.data;
   }
 
   const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
@@ -89,7 +88,7 @@
       <el-form-item label="上传头像" prop="iconurl">
         <el-upload
             class="avatar-uploader"
-            action="http://localhost:8080/upload"
+            action="/api/upload"
             :show-file-list="false"
             :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload"
@@ -106,7 +105,6 @@
     </el-form>
   </el-dialog>
 </template>
-
 
 
 <style scoped>
