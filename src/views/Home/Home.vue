@@ -116,7 +116,7 @@ onMounted(async () => {
 
     <div class="ranking">
       <div class="wrap">
-        <div class="ranking-item-left">
+        <div class="ranking-item-top">
           <h6 class="ranking-item-title">热度排行</h6>
           <ul class="hotArticle">
             <li v-for="(item, idx) in hotList" :key="idx" class="hot-item">
@@ -132,8 +132,7 @@ onMounted(async () => {
             </li>
           </ul>
         </div>
-        <div class="ranking-item-right">
-          <h6 class="ranking-item-title">关键词</h6>
+        <div class="ranking-item-bottom">
           <KeyWordPieChart :apiResult="pieApiResult" />
         </div>
       </div>
@@ -155,9 +154,9 @@ onMounted(async () => {
 .title-wrap{ display:flex; flex-direction:column; min-width:0 }
 .title{ font-size:15px; color: rgb(51,51,51); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:620px; text-decoration:none }
 .topic{ color: rgb(102,102,102); font-size:13px; min-width: 110px; text-align: right }
-.ranking-item-left{ width: 782px; height: 365px; overflow: hidden; background: rgb(246,249,251); color: rgb(51,51,51); padding: 8px 12px; box-sizing: border-box; }
-.ranking-item-left .hotArticle{ height: calc(365px - 36px - 16px); overflow: hidden }
-.ranking-item-right{ width: 300px }
+.ranking-item-top{ width: 1082px; height: 365px; overflow: hidden; background: rgb(246,249,251); color: rgb(51,51,51); padding: 8px 12px; box-sizing: border-box;margin-bottom: 80px}
+.ranking-item-top .hotArticle{ height: calc(365px - 36px - 16px); overflow: hidden }
+.ranking-item-bottom{ width: 1082px; background: rgb(246,249,251);}
 .home-page{ min-height: 100vh; padding-bottom: 30vh }
 .banner{ position: absolute; width: 100%; height: 450px; background-size: cover; background-image: url("@/assets/background/banner.png"); z-index: -1; }
 .banner:after{ display: block; position: absolute; content: ""; bottom: -50px; z-index:2; width:100%; height: 88px; background-image: url("@/assets/background/banner-wave.png"); background-size: 100% 100%; }
@@ -171,6 +170,6 @@ onMounted(async () => {
 .submit-icon { width: 16px; height: 16px; display: block; }
 .submit-circle:hover { transform: translateY(-50%) scale(1.04); filter: brightness(0.95); }
 .submit-circle:active { transform: translateY(-50%) scale(0.98); }
-.ranking{ margin: 0 auto; border-radius: 8px; height: 280px; }
-.wrap{ width: auto; margin: 0 auto; display: flex; justify-content: center; gap: 30px; max-width:1082px ; }
+.ranking{ margin: 0 auto; border-radius: 8px; height: auto; }
+.wrap{ width: auto; margin: 0 auto; gap: 30px; max-width:1082px ; }
 </style>
