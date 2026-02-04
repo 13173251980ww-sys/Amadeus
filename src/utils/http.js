@@ -5,7 +5,7 @@ import {ElMessage} from "element-plus";
 const httpInstance = axios.create({
     // baseURL:'/api',
     baseURL: import.meta.env.VITE_API_BASE_URL,
-    timeout: 5000
+    timeout: 30000, // 请求超时时间
 })
 
 // 拦截器
