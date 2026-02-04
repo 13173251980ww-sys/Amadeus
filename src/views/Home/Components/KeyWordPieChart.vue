@@ -1,59 +1,67 @@
+// src/views/Home/Components/KeyWordPieChart.vue
 <script setup>
 import { ref, onMounted, onUnmounted, watch } from 'vue';
-// 1. 引入 echarts 核心模块
 import * as echarts from 'echarts/core';
-// 2. 引入饼图图表 (PieChart)
 import { PieChart } from 'echarts/charts';
-// 3. 引入提示框，标题，图例组件
-import {
-  TitleComponent,
-  TooltipComponent,
-  LegendComponent
-} from 'echarts/components';
-// 4. 引入渲染器
+import { TitleComponent, TooltipComponent, LegendComponent } from 'echarts/components';
 import { CanvasRenderer } from 'echarts/renderers';
-// 5. 引入 Pinia Store (假设你有一个统计数据的 store)
-// import { useChickenStores } from "@/stores/chickenStores.js";
 
-// 注册必须的组件
-echarts.use([
-  TitleComponent,
-  TooltipComponent,
-  LegendComponent,
-  PieChart,
-  CanvasRenderer
-]);
+echarts.use([TitleComponent, TooltipComponent, LegendComponent, PieChart, CanvasRenderer]);
+
+const props = defineProps({
+  apiResult: {
+    type: Object,
+    default: null
+  }
+});
 
 const chartRef = ref(null);
 let myChart = null;
-// const chickenStore = useChickenStores();
+const resizeHandler = () => { if (myChart) myChart.resize(); };
 
-// 图表配置项
-const getOption = () => ({
-  title: {
-    text: '分类占比统计',
-    left: 'center'
-  },
-  tooltip: {
-    trigger: 'item',
-    formatter: '{a} <br/>{b} : {c} ({d}%)'
-  },
-  legend: {
-    orient: 'vertical',
-    left: 'left'
-  },
+const defaultData = [
+  { value: 1048, name: '搜索引擎' },
+  { value: 735, name: '直接访问' },
+  { value: 580, name: '邮件营销' },
+  { value: 484, name: '联盟广告' },
+  { value: 300, name: '视频广告' }
+];
+
+function toSeriesData(maybeApiResult) {
+  // Accepts structures like: { data: { keyword: [...] } } or directly an array
+  let arr = null;
+  if (!maybeApiResult) return defaultData;
+  if (Array.isArray(maybeApiResult)) arr = maybeApiResult;
+  else if (maybeApiResult.data && Array.isArray(maybeApiResult.data.keyword)) arr = maybeApiResult.data.keyword;
+  else if (maybeApiResult.keyword && Array.isArray(maybeApiResult.keyword)) arr = maybeApiResult.keyword;
+  if (!arr || !arr.length) return defaultData;
+
+  // Convert value like "30%" to numeric value 30
+  return arr.map(item => {
+    const name = item.name || item.title || '';
+    let value = item.value;
+    if (typeof value === 'string') {
+      // strip percent and commas
+      const v = value.replace(/[,\s]/g, '');
+      const parsed = parseFloat(v.replace('%', '').trim());
+      value = Number.isNaN(parsed) ? 0 : parsed;
+    } else if (typeof value !== 'number') {
+      value = Number(value) || 0;
+    }
+    return { name, value };
+  });
+}
+
+const getOption = (seriesData) => ({
+  title: { text: '关键词占比', left: 'center' },
+  tooltip: { trigger: 'item', formatter: '{a} <br/>{b} : {c} ({d}%)' },
+  legend: { orient: 'vertical', left: 'left' },
   series: [
     {
-      name: '访问来源',
-      type: 'pie', // 设置为饼图
-      radius: '50%', // 饼图半径
-      data: [
-        { value: 1048, name: '搜索引擎' },
-        { value: 735, name: '直接访问' },
-        { value: 580, name: '邮件营销' },
-        { value: 484, name: '联盟广告' },
-        { value: 300, name: '视频广告' }
-      ],
+      name: '关键词',
+      type: 'pie',
+      radius: '50%',
+      data: seriesData && seriesData.length ? seriesData : defaultData,
       emphasis: {
         itemStyle: {
           shadowBlur: 10,
@@ -66,36 +74,30 @@ const getOption = () => ({
 });
 
 onMounted(() => {
-  // 初始化
   myChart = echarts.init(chartRef.value);
-  myChart.setOption(getOption());
+  const initial = toSeriesData(props.apiResult);
+  myChart.setOption(getOption(initial));
+  window.addEventListener('resize', resizeHandler);
+});
 
-  // 监听窗口大小变化，自动重绘
-  window.addEventListener('resize', () => myChart.resize());
+watch(() => props.apiResult, (newVal) => {
+  if (!myChart) return;
+  const newData = toSeriesData(newVal);
+  myChart.setOption({ series: [{ data: newData }] });
 });
 
 onUnmounted(() => {
-  // 销毁实例，防止内存泄漏
   if (myChart) {
     myChart.dispose();
-    window.removeEventListener('resize', () => myChart.resize());
+    myChart = null;
   }
+  window.removeEventListener('resize', resizeHandler);
 });
-
-// 如果数据来自 Pinia，可以监听 store 变化
-/*
-watch(() => chickenStore.stats, (newData) => {
-  myChart.setOption({
-    series: [{ data: newData }]
-  });
-}, { deep: true });
-*/
 </script>
 
 <template>
   <div class="container">
-    <el-card>
-      <!-- 必须指定高度，否则图表不会显示 -->
+    <el-card style="border:0; box-shadow:none; padding:0;">
       <div ref="chartRef" style="width: 100%; height: 400px;"></div>
     </el-card>
   </div>
