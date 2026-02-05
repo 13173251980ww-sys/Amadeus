@@ -21,71 +21,18 @@ const apiResultRef = ref(null); // 保存原始接口返回（供子组件使用
 
 const pieApiResult = computed(() => apiResultRef.value || null);
 
-const CACHE_KEY = 'hotListCache_v1';
-const TTL = 24 * 60 * 60 * 1000; // 24 小时
+async function loadHotData(){
+  try{
+    const res =await getHotDataApi();
+    const payload=res.data;
 
-async function loadHotData() {
-  const raw = localStorage.getItem(CACHE_KEY);
-  let parsed = null;
-  if (raw) {
-    try { parsed = JSON.parse(raw); } catch (e) { parsed = null; }
-  }
+    apiResultRef.value={data:{keyword: payload.keyword}};
 
-  // 如果缓存存在且未过期，直接使用缓存（同时恢复 apiResult）
-  if (parsed && parsed.timestamp && (Date.now() - parsed.timestamp) < TTL) {
-    if (Array.isArray(parsed.data)) {
-      hotList.value = parsed.data.slice(0, 10);
-    } else {
-      hotList.value = [];
-    }
-    apiResultRef.value = parsed.apiResult || null;
-    return;
-  }
-
-  // 否则发起请求并更新缓存
-  try {
-    const res = await getHotDataApi();
-
-    // 兼容 axios 返回格式：res.data 为响应体，也可能是直接返回对象
-    const payload = (res && res.data) ? res.data : res;
-
-    // 将关键词数据（如果存在）保存为子组件可消费的结构
-    if (payload && Array.isArray(payload.keyword)) {
-      apiResultRef.value = { data: { keyword: payload.keyword } };
-    } else if (payload && payload.data && Array.isArray(payload.data.keyword)) {
-      apiResultRef.value = { data: { keyword: payload.data.keyword } };
-    } else {
-      apiResultRef.value = null;
-    }
-
-    // 列表优先从 payload.data（文章列表）读取
-    if (payload && Array.isArray(payload.data)) {
-      hotList.value = payload.data.slice(0, 10);
-    } else if (Array.isArray(payload.keyword)) {
-      // 兜底：如果只返回 keyword 数组，把它当作列表（一般不会发生）
-      hotList.value = payload.keyword.slice(0, 10);
-    } else {
-      hotList.value = [];
-    }
-
-    try {
-      localStorage.setItem(
-          CACHE_KEY,
-          JSON.stringify({ timestamp: Date.now(), data: hotList.value, apiResult: apiResultRef.value })
-      );
-    } catch (e) {
-      console.error('set cache failed', e);
-    }
-  } catch (err) {
-    console.error('getHotDataApi failed', err);
-    // 请求失败时如果有旧缓存（即使已过期）可以回退使用
-    if (parsed && Array.isArray(parsed.data)) {
-      hotList.value = parsed.data.slice(0, 10);
-      apiResultRef.value = parsed.apiResult || null;
-    } else {
-      hotList.value = [];
-      apiResultRef.value = null;
-    }
+    hotList.value=payload.data.slice(0,10);
+  }catch (err){
+    console.log("获取热点数据失败",err);
+    hotList.value=[];
+    apiResultRef.value=null;
   }
 }
 
