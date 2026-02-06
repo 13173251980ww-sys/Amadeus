@@ -8,8 +8,6 @@ const posts = ref([
   { id: 4, title: '部署', excerpt: '关于后端的一些知识点', url: '#' },
   { id: 5, title: 'unity游戏开发',excerpt: '关于游戏开发的一些知识点', url: '#' },
 ])
-
-
 </script>
 
 <template>

@@ -117,7 +117,7 @@ const onSubmit = () => {
 
 .login-page {
   min-height: 100vh; /* 让背景覆盖整个视口高度 */
-  background-color: $bg-color-page;
+  background-color:var(--color-dark-page);
   position: relative; /* 为绝对定位的背景层提供参考 */
   overflow: hidden;
   display: flex;
@@ -175,14 +175,13 @@ const onSubmit = () => {
   text-align: center;
   margin-bottom: 100px;
   margin-top: -48px; /* 向上更多移动标题 */
-  color: $color-primary-light;
+  color: var(--color-gold-light);
   font-weight: 700; /* 将 h2 标题加粗 */
   font-size: 77px; /* 更大标题 */
 }
 
-/* 让 el-form 的 label 使用主题主色（$color-primary-light） */
 .login-container .el-form-item__label {
-  color: $color-primary-light;
+  color: var(--color-gold-light);
 }
 
 /* 字体类：Yuji Boku */
