@@ -135,3 +135,81 @@
 .el-dialog__body {
     color: var(--color-text-regular) !important;
 }
+
+/*消息提示组件深度定制*/
+.el-message{
+    display: flex;
+    position: absolute;
+    top: 0;
+    right: 0;
+    /* 暗金到暗橙的渐变背景，与页面主题一致 */
+    background: linear-gradient(90deg, #b8860b 0%, #d35400 100%);
+    color: #0b0b0b;
+    border-radius: 8px;
+    padding: 10px 14px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.28);
+    border: 1px solid rgba(0,0,0,0.12);
+    /* keep existing absolute positioning (用户要求定位不变) */
+    transform: translateX(120%);
+    animation: el-message-slide-in 360ms cubic-bezier(.2,.9,.2,1) forwards;
+    z-index: 9999;
+}
+
+.el-message__content {
+    color: inherit;
+    font-weight: 700;
+}
+
+/* Slide-in from right (X-axis only) */
+@keyframes el-message-slide-in {
+    from { transform: translateX(120%); opacity: 0; }
+    to   { transform: translateX(0);   opacity: 1; }
+}
+
+/* Slide-out back to right when leaving */
+.el-message-leave-active {
+    animation: el-message-slide-out 320ms cubic-bezier(.2,.9,.2,1) forwards;
+}
+@keyframes el-message-slide-out {
+    from { transform: translateX(0); opacity: 1; }
+    to   { transform: translateX(120%); opacity: 0; }
+}
+
+/*圆按钮定制*/
+.submit-circle {
+    position: absolute;
+    right: -42px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    /* 左->右 暗橙 到 暗金 渐变 */
+    background: linear-gradient(90deg, #d35400 0%, #b8860b 100%);
+    color: transparent; /* 使用 SVG 作为图标，文本颜色隐藏 */
+    font-weight: 700; /* 保留字体加粗（若使用文本作为回退） */
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    transition: transform 0.15s ease, filter 0.15s ease;
+    font-size: 18px;
+    line-height: 1;
+}
+
+.submit-icon {
+    width: 16px;
+    height: 16px;
+    display: block;
+}
+
+.submit-circle:hover {
+    transform: translateY(-50%) scale(1.04);
+    filter: brightness(0.95);
+}
+
+.submit-circle:active {
+    transform: translateY(-50%) scale(0.98);
+}

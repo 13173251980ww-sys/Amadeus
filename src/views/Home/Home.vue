@@ -114,9 +114,6 @@ onMounted(async () => {
 .chat-input{ background: #f9f9f9; }
 .chat-show{ width: 780px; min-height: 150px; padding: 12px; background:rgb(28,28,28); border: 1px solid #ddd; border-radius: 4px; white-space: pre-wrap; }
 .submit-circle { position: absolute; right: 10px; top: 450%; transform: translateY(-50%); width: 36px; height: 36px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; border: none; background: linear-gradient(90deg, #d35400 0%, #b8860b 100%); color: transparent; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.12); transition: transform 0.15s ease, filter 0.15s ease; font-size: 18px; line-height: 1; }
-.submit-icon { width: 16px; height: 16px; display: block; }
-.submit-circle:hover { transform: translateY(-50%) scale(1.04); filter: brightness(0.95); }
-.submit-circle:active { transform: translateY(-50%) scale(0.98); }
 .ranking{ margin: 0 auto; border-radius: 8px; height: auto; }
 .wrap{ width: auto; margin: 0 auto; gap: 30px; max-width:1082px ; }
 </style>
